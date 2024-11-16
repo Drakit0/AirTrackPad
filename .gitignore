@@ -1,0 +1,6 @@
+processed_data/
+__pycache__/
+*.zip
+*.pdf
+*.doc
+*.ppt
