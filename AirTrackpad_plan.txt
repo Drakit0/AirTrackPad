@@ -1,0 +1,119 @@
+Air Trackpad Development Plan (Using MediaPipe with Advanced Techniques)
+
+## Phase 1: Preparation and Setup
+
+### 1.1 Development Environment
+1. Ensure Python is set up on both Raspberry Pi and laptop.
+2. Install key dependencies:
+   - `mediapipe`: For hand detection and landmarks.
+   - `opencv-python`: For video capture, image processing, and preprocessing.
+   - `numpy`: For matrix operations and numerical data handling.
+
+### 1.2 Initial Tests
+1. Verify that the camera (on both Raspberry Pi and laptop) works correctly with OpenCV.
+2. Test the MediaPipe hand detection model in real-time.
+
+---
+
+## Phase 2: Processing Pipeline
+
+### 2.1 Video Capture
+**Goal**: Capture frames from the camera in real-time and pass them through a processing pipeline without delays.
+
+**Steps**:
+1. Set up video capture using OpenCV to retrieve frames from the camera.
+2. Adjust the resolution based on the device (lower resolution for Raspberry Pi).
+3. Normalize colors if the background is inconsistent (e.g., use HSV conversion for stabilization).
+
+### 2.2 Image Preprocessing
+**Goal**: Increase system accuracy by eliminating noise and highlighting key features.
+
+**Techniques**:
+1. **Edge Detection (Sobel/Canny)**:
+   - Apply edge filters to the regions of interest to validate MediaPipe detections.
+2. **Background Subtraction**:
+   - Use techniques like MOG2 (from OpenCV) to remove irrelevant background information.
+3. **Contrast Standardization**:
+   - Enhance contrast with histogram equalization techniques.
+
+### 2.3 Hand Detection with MediaPipe
+**Goal**: Detect hands and extract key landmarks.
+
+**Steps**:
+1. Initialize the MediaPipe Model:
+   - Configure the detector with optimal parameters for real-time performance.
+2. Process Each Frame:
+   - Pass preprocessed frames into the MediaPipe detector.
+3. Extract Landmarks:
+   - Retrieve the 3D coordinates of key points such as the index fingertip and palm center.
+
+---
+
+## Phase 3: Enrichment with Learned Techniques
+
+### 3.1 Refinement with Image Processing
+1. **Corner Detection**:
+   - Use Harris or Shi-Tomasi methods to analyze whether MediaPipe landmarks align with areas of high local variation.
+   - Helps validate detections in complex or moving backgrounds.
+2. **Feature Matching**:
+   - Apply SIFT/KAZE in critical areas (e.g., fingers) to track textures or keypoints that complement MediaPipe landmarks.
+   - Useful when MediaPipe temporarily loses precision.
+
+### 3.2 Tracking and Stabilization
+1. **Optical Flow**:
+   - Use optical flow (e.g., Lucas-Kanade) to track motion between frames.
+   - Integrate this tracking with MediaPipe landmarks for smoother movements.
+2. **Kalman Filter**:
+   - Design a filter to predict cursor position based on past movements.
+   - Helps mitigate abrupt jumps caused by detection failures.
+
+### 3.3 Complex Gesture Recognition
+1. **Bag of Visual Words**:
+   - Train a model based on the bag of visual words approach to recognize specific gestures (e.g., "click," "drag," "scroll").
+   - Use features detected with SIFT/KAZE as inputs for the classifier.
+2. **Gesture Classification**:
+   - Design rules or use an ML classifier (e.g., SVM or Random Forest) to map landmark configurations to actions.
+
+---
+
+## Phase 4: Cursor Mapping and Control
+
+### 4.1 Coordinate Mapping
+1. Scale landmark positions to the screen size.
+2. Dynamically adjust based on input and output resolutions.
+
+### 4.2 Action Definitions
+1. Define cursor actions:
+   - **Movement**: Based on index finger position.
+   - **Click**: Based on a gesture (e.g., pinch with thumb and index finger).
+   - **Scroll**: Based on vertical or circular gestures.
+
+---
+
+## Phase 5: Optimization
+
+### 5.1 Adaptation to Different Backgrounds
+1. Implement color or texture detection to automatically adjust preprocessing based on the background.
+
+### 5.2 Performance on Raspberry Pi
+1. Lower resolution and processing frequency if necessary.
+2. Consider processing only a region of interest (ROI) around the hand.
+
+### 5.3 Stability Tests
+1. Test with different backgrounds, movement speeds, and lighting conditions.
+
+---
+
+## Phase 6: User Interface and Debugging
+
+### 6.1 Visual Interface
+1. Display detected landmarks and cursor movement in real-time for debugging.
+
+### 6.2 Event Logging
+1. Create a logging system to record detection failures or performance issues.
+
+### 6.3 Final Testing
+1. Validate the system on multiple devices and under different conditions.
+
+---
+
