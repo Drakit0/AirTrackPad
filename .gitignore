@@ -1,5 +1,6 @@
 processed_data/
-__pycache__/
+raw_data/
+.mypy_cache/
 *.zip
 *.pdf
 *.doc

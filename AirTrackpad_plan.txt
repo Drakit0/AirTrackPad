@@ -2,14 +2,14 @@ Air Trackpad Development Plan (Using MediaPipe with Advanced Techniques)
 
 ## Phase 1: Preparation and Setup
 
-### 1.1 Development Environment
-1. Ensure Python is set up on both Raspberry Pi and laptop.
-2. Install key dependencies:
+### 1.1 Development Environment ✔
+1. Ensure Python is set up on both Raspberry Pi and laptop. 
+2. Install key dependencies: 
    - `mediapipe`: For hand detection and landmarks.
    - `opencv-python`: For video capture, image processing, and preprocessing.
    - `numpy`: For matrix operations and numerical data handling.
 
-### 1.2 Initial Tests
+### 1.2 Initial Tests ✔
 1. Verify that the camera (on both Raspberry Pi and laptop) works correctly with OpenCV.
 2. Test the MediaPipe hand detection model in real-time.
 
@@ -21,22 +21,22 @@ Air Trackpad Development Plan (Using MediaPipe with Advanced Techniques)
 **Goal**: Capture frames from the camera in real-time and pass them through a processing pipeline without delays.
 
 **Steps**:
-1. Set up video capture using OpenCV to retrieve frames from the camera.
-2. Adjust the resolution based on the device (lower resolution for Raspberry Pi).
-3. Normalize colors if the background is inconsistent (e.g., use HSV conversion for stabilization).
+1. Set up video capture using OpenCV to retrieve frames from the camera. ✔
+2. Adjust the resolution based on the device (lower resolution for Raspberry Pi).✔
+3. Normalize colors if the background is inconsistent (e.g., use HSV conversion for stabilization).❌
 
 ### 2.2 Image Preprocessing
 **Goal**: Increase system accuracy by eliminating noise and highlighting key features.
 
 **Techniques**:
 1. **Edge Detection (Sobel/Canny)**:
-   - Apply edge filters to the regions of interest to validate MediaPipe detections.
+   - Apply edge filters to the regions of interest to validate MediaPipe detections. ✔
 2. **Background Subtraction**:
-   - Use techniques like MOG2 (from OpenCV) to remove irrelevant background information.
+   - Use techniques like MOG2 (from OpenCV) to remove irrelevant background information. On progress
 3. **Contrast Standardization**:
    - Enhance contrast with histogram equalization techniques.
 
-### 2.3 Hand Detection with MediaPipe
+### 2.3 Hand Detection with MediaPipe ✔
 **Goal**: Detect hands and extract key landmarks.
 
 **Steps**:
@@ -72,7 +72,7 @@ Air Trackpad Development Plan (Using MediaPipe with Advanced Techniques)
    - Train a model based on the bag of visual words approach to recognize specific gestures (e.g., "click," "drag," "scroll").
    - Use features detected with SIFT/KAZE as inputs for the classifier.
 2. **Gesture Classification**:
-   - Design rules or use an ML classifier (e.g., SVM or Random Forest) to map landmark configurations to actions.
+   - Design rules or use an ML classifier (Logistic regression/neural network of 1-10 neurons) to map landmark configurations to actions.
 
 ---
 
@@ -101,6 +101,9 @@ Air Trackpad Development Plan (Using MediaPipe with Advanced Techniques)
 
 ### 5.3 Stability Tests
 1. Test with different backgrounds, movement speeds, and lighting conditions.
+
+### 5.4 Processing optimization
+1. A thread captures images and the detector runs on another thread. https://pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
 
 ---
 
