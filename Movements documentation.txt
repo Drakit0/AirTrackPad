@@ -1,10 +1,10 @@
 ### Click Actions
 **Purpose:** Select items on the screen or access menus. 
 
-- **Right-hand click:** Point at an element and perform a specific hand gesture to select it. 
+- **Left-hand click:** Point at an element and perform a specific hand gesture to select it. 
   - **Gesture:** Bring together the index, middle finger, and thumb.
-- **Left-hand click:** Same gesture, but with the left hand, to display a context menu.
-- **Double click:** Tap twice with the right-hand gesture to open the element.
+- **Right-hand click:** Same gesture, but with the left hand, to display a context menu.
+- **Double click:** Tap twice with the left-hand gesture to open the element.
 
 ---
 
