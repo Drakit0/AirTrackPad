@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import mediapipe as mp
+from utils import roi_extractor, draw_landmarks
 
 class HandDetector:
     
@@ -10,11 +11,8 @@ class HandDetector:
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
 
-        self.hands = mp.solutions.hands.Hands( # MediaPipe Hands model
-            min_detection_confidence=min_detection_confidence,
-            min_tracking_confidence=min_tracking_confidence
-        )
-        
+        self.hands = mp.solutions.hands.Hands(min_detection_confidence=min_detection_confidence, min_tracking_confidence=min_tracking_confidence)# MediaPipe Hands model
+            
         self.landmarks = None # Mediapipe landmarks
         self.sobel_edges = [] # Sobel edges
         self.accuracy = 0.0 # Model accuracy
@@ -25,16 +23,8 @@ class HandDetector:
         self.landmarks = self.hands.process(rgb_frame)
 
         if self.landmarks.multi_hand_landmarks and draw: # Draw Landmarks on image, sometimes affects sobel (hence model accuracy)
-            for hand_landmarks in self.landmarks.multi_hand_landmarks:
+            draw_landmarks(frame, self.landmarks, self.mp_drawing, self.mp_drawing_styles)
                 
-                self.mp_drawing.draw_landmarks(
-                    frame,
-                    hand_landmarks,
-                    mp.solutions.hands.HAND_CONNECTIONS,
-                    self.mp_drawing_styles.get_default_hand_landmarks_style(),
-                    self.mp_drawing_styles.get_default_hand_connections_style()
-                )
-
     def sobel_detection(self, frame):
 
         self.sobel_edges = []
@@ -42,23 +32,9 @@ class HandDetector:
         if not self.landmarks or not self.landmarks.multi_hand_landmarks: # Only check sobel if hands are detected
             return
 
-        frame_h, frame_w = frame.shape[:2]
+        for landmarks in self.landmarks.multi_hand_landmarks:
 
-        for hand_landmarks in self.landmarks.multi_hand_landmarks:
-            x_coords = [int(lm.x * frame_w) for lm in hand_landmarks.landmark] # Normalized coords to pixel coords
-            y_coords = [int(lm.y * frame_h) for lm in hand_landmarks.landmark]
-            
-            x_min = min(x_coords) # ROI around landmarks
-            x_max = max(x_coords)
-            y_min = min(y_coords)
-            y_max = max(y_coords)
-            
-            padding = 10 # ROI with padding
-            x_min = max(0, x_min - padding)
-            y_min = max(0, y_min - padding)
-            x_max = min(frame_w, x_max + padding)
-            y_max = min(frame_h, y_max + padding)
-            roi = frame[y_min:y_max, x_min:x_max]
+            roi, x_min, y_min, x_max, y_max = roi_extractor(landmarks, frame) # ROI around hand
 
             gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 
@@ -68,10 +44,9 @@ class HandDetector:
 
             edges = np.uint8(magnitude > 50) * 255 # 50 good lighting, 100 low lighting, pherhaps automatize change if accuracy lowers too much
 
-            cv2.imshow("Edges", edges) # Hands ROI edges
+            # cv2.imshow("Edges", edges) # Hands ROI edges
 
             self.sobel_edges.append((edges, (x_min, y_min, x_max, y_max)))
-
 
     def check_landmarks(self):
 
@@ -100,7 +75,6 @@ class HandDetector:
             matched = 0
             total_landmarks = len(landmarks.landmark)
             
-            
             for landmark in landmarks.landmark: # For each landmark, find pos in ROI
 
                 local_x = (landmark.x * roi_w) - x_min # absolute coords to relative ROI coords
@@ -108,7 +82,6 @@ class HandDetector:
 
                 x_final = int(local_x * scale_x) # Scale back to original size
                 y_final = int(local_y * scale_y)
-
 
                 neighborhood = 3 # How close to a landmark to check
                 x_start = max(0, x_final - neighborhood)
@@ -122,7 +95,7 @@ class HandDetector:
                     matched += 1
 
             self.accuracy = matched / total_landmarks
-            print(f"Accuracy: {self.accuracy:.2f}") # Accuracy of the model
+            # print(f"Accuracy: {self.accuracy:.2f}") # Show accuracy
 
 
             
