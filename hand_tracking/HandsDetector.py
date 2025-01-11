@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import mediapipe as mp
-from utils import roi_extractor, draw_landmarks
+from Utils import roi_extractor, draw_landmarks
 
 class HandDetector:
     

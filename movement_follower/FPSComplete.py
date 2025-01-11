@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import mediapipe as mp
-from utils import roi_extractor
+from Utils import roi_extractor
 
 def landmark_completor(prev_frame, prev_landmarks, current_frame, device="computer"):
 

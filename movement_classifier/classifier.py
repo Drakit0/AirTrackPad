@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 class NeuralClassifier:
     
-    def __init__(self, model_path='gesture_classifier.pkl', scaler_path='scaler.pkl', num_features=126, num_classes=9):
+    def __init__(self, model_path='gesture_classifier.pkl', scaler_path='scaler.pkl', num_features=154, num_classes=11):
         """
         Initializes the AirTrackPad system.
         
@@ -55,7 +55,6 @@ class NeuralClassifier:
         - random_state: Controls the shuffling applied to the data before applying the split.
         """
         
-        print("Starting model training...")
         self.scaler = StandardScaler()
         X_scaled = self.scaler.fit_transform(X) # Normalize features
         

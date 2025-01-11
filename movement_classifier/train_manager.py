@@ -15,7 +15,7 @@ gestures = [
     "No Gesture"]
 
 trainer = GestureTrainer(gestures=gestures)
-trainer.collect_data(num_samples_per_gesture=500)
+trainer.collect_data(num_samples_per_gesture=400)
 
 # t_0 = time.time()
 trainer.train_from_saved_data()

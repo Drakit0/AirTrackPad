@@ -148,7 +148,7 @@ class ActionManager:
         Maps the coordinates from webcam frame to screen size.
         """
         
-        index_finger_tip = hand_landmarks.landmark[8]
+        index_finger_tip = hand_landmarks[8]
         x = int(index_finger_tip.x * self.frame_width)
         y = int(index_finger_tip.y * self.frame_height)
         

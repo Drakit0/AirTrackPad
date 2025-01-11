@@ -1,3 +1,4 @@
+import os
 import cv2
 import joblib
 import numpy as np
@@ -8,7 +9,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 class GestureTrainer:
-    def __init__(self, gestures, model_path='movement_clasifier/models/gesture_classifier.pkl', scaler_path='movement_clasifier/models/scaler.pkl', data_path='movement_clasifier/models/gesture_data.npy'):
+    def __init__(self, gestures, model_path='movement_classifier/models/gesture_classifier.pkl', scaler_path='movement_classifier/models/scaler.pkl', data_path='movement_classifier/models/gesture_data.npy'):
         """
         Initializes the GestureTrainer system.
         
@@ -97,7 +98,7 @@ class GestureTrainer:
                             all_features.extend(features)
                         
                         # Ensure the feature vector has the correct length
-                        expected_length = 42 * 3  # 21 landmarks * x,y,z for 2 hands
+                        expected_length = 154  # 21 landmarks * x,y,z for 2 hands ######CHANGE THIS TO UPDATE THE NUMBER OF FEATURES 21*3*2 = gestures*14
                         if len(all_features) < expected_length:
                             # Pad with zeros if less than expected
                             all_features += [0.0] * (expected_length - len(all_features))
@@ -127,6 +128,7 @@ class GestureTrainer:
         
         features = np.array([sample[0] for sample in self.data])
         labels = np.array([sample[1] for sample in self.data])
+
         np.save(self.data_path, {'features': features, 'labels': labels})
         print(f"Saved collected data to {self.data_path}.")
 
@@ -141,6 +143,7 @@ class GestureTrainer:
         data = np.load(self.data_path, allow_pickle=True).item()
         features = data['features']
         labels = data['labels']
+
         print(f"Loaded data from {self.data_path}: {features.shape[0]} samples.")
         return features, labels
 
@@ -156,7 +159,7 @@ class GestureTrainer:
         # Normalize features
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
-        
+
         # Split the data
         X_train, X_val, y_train, y_val = train_test_split(
             X_scaled, y, test_size=0.2, random_state=42, stratify=y
@@ -185,6 +188,7 @@ class GestureTrainer:
         Loads the saved data and trains the model.
         """
         X, y = self.load_data()
+
         if X is not None and y is not None:
             self.train_model(X, y)
         else:
