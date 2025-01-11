@@ -16,6 +16,7 @@ class ActionManager:
         """
         Executes the corresponding action based on the detected gesture.
         """
+        
         if gesture == 0:
             self._left_click()
             
@@ -131,7 +132,13 @@ class ActionManager:
         self.action.release()
         
     def _pointing(self, hand_landmarks):
-        """Handles pointing gesture by moving the mouse cursor."""
+        """
+        Handles pointing gesture by moving the mouse cursor.
+        
+        Args
+        ----
+            - hand_landmarks: Detected hand landmarks.
+        """
         
         screen_x, screen_y = self.map_coordinates(hand_landmarks)
         
@@ -146,6 +153,10 @@ class ActionManager:
     def map_coordinates(self, hand_landmarks):
         """
         Maps the coordinates from webcam frame to screen size.
+        
+        Args
+        ----
+            - hand_landmarks: Detected hand landmarks.
         """
         
         index_finger_tip = hand_landmarks[8]

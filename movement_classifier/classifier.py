@@ -14,11 +14,12 @@ class NeuralClassifier:
         """
         Initializes the AirTrackPad system.
         
-        Parameters:
-        - model_path: Path to the saved classifier model.
-        - scaler_path: Path to the saved scaler.
-        - num_features: Number of input features 14*num_clases.
-        - num_classes: Number of gesture classes.
+        Args
+        ----
+            - model_path: Path to the saved classifier model.
+            - scaler_path: Path to the saved scaler.
+            - num_features: Number of input features 14*num_clases.
+            - num_classes: Number of gesture classes.
         """
         
         self.model_path = model_path
@@ -48,11 +49,12 @@ class NeuralClassifier:
         """
         Trains the MLPClassifier with the provided data.
         
-        Parameters:
-        - X: Feature matrix.
-        - y: Labels.
-        - test_size: Proportion of the dataset to include in the test split.
-        - random_state: Controls the shuffling applied to the data before applying the split.
+        Args
+        ----
+            - X: Feature matrix.
+            - y: Labels.
+            - test_size: Proportion of the dataset to include in the test split.
+            - random_state: Controls the shuffling applied to the data before applying the split.
         """
         
         self.scaler = StandardScaler()
@@ -77,11 +79,13 @@ class NeuralClassifier:
         """
         Converts Mediapipe landmarks to a feature vector.
         
-        Parameters:
-        - landmarks: List of Mediapipe landmarks.
+        Args
+        ----
+            - landmarks: List of Mediapipe landmarks.
         
-        Returns:
-        - features: Normalized feature vector.
+        Returns
+        -------
+            - features: Normalized feature vector.
         """
         
         features = []
@@ -100,16 +104,18 @@ class NeuralClassifier:
         
         return features
     
-    def classify_gesture(self, features):
+    def classify_gesture(self, features: np.ndarray):
         """
         Classifies the gesture based on the input features.
         
-        Parameters:
-        - features: Normalized feature vector.
+        Args
+        ----
+            - features: Normalized feature vector.
         
-        Returns:
-        - predicted_class: The predicted gesture class.
-        - confidence: Probability of the predicted class.
+        Returns
+        -------
+            - predicted_class: The predicted gesture class.
+            - confidence: Probability of the predicted class.
         """
         
         probabilities = self.model.predict_proba(features)[0]

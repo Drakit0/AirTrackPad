@@ -1,8 +1,8 @@
 import cv2
 import time
 import numpy as np
+from picamera2 import Picamera2
 from Utils import draw_landmarks
-from picamera2 import Picamera2, Preview
 from hand_tracking.HandsDetector import HandDetector
 from movement_follower.FPSComplete import landmark_completor
 from movement_classifier.Classifier import NeuralClassifier
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     
     detector = HandDetector() # Hand detector
     
-    frame_width = 640
-    frame_height = 480
+    frame_width = 640 # 320
+    frame_height = 480 # 240
     manager = ActionManager(frame_width, frame_height) # Action manager
     
     prev_frame = None # For optical flow
@@ -41,21 +41,16 @@ if __name__ == "__main__":
     
     gesture = 10
     
-    # cam = cv2.VideoCapture(0)
-    
     picam2 = Picamera2()
-    # picam2.preview_configuration.main.size = (4608, 2592)
+    # picam2.preview_configuration.main.size = (320, 240)
     picam2.preview_configuration.main.format = "RGB888"
     picam2.preview_configuration.align()
-    # picam2.configure("preview")
     picam2.start()
     
-    while cam.isOpened():
+    
+    while True:
         
-        ret, frame = cam.read()
-
-        if not ret:
-            break
+        frame = picam2.capture_array()
         
         frame = cv2.flip(frame, 1) # Mirror view
         
@@ -108,3 +103,6 @@ if __name__ == "__main__":
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+        
+    picam2.stop()
+    cv2.destroyAllWindows()

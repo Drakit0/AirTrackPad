@@ -3,7 +3,21 @@ import numpy as np
 import mediapipe as mp
 from Utils import roi_extractor
 
-def landmark_completor(prev_frame, prev_landmarks, current_frame, device="computer"):
+def landmark_completor(prev_frame: np.ndarray, prev_landmarks, current_frame, device="computer"):
+    """
+    The function uses optical flow to modify the landmarks of the current frame based on the previous frame.
+    
+    Args
+    ----
+        - prev_frame: Previous frame.
+        - prev_landmarks: Previous landmarks.
+        - current_frame: Current frame.
+        - device: Device where the function is running.
+        
+    Returns
+    -------
+        - prev_landmarks: Updated landmarks.
+    """
 
     if device != "computer": # Resize edges for easier processing
         winSize = (5, 5)

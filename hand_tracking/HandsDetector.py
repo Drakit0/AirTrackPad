@@ -17,7 +17,15 @@ class HandDetector:
         self.sobel_edges = [] # Sobel edges
         self.accuracy = 0.0 # Model accuracy
     
-    def mediapipe_detection(self, frame, draw=False):
+    def mediapipe_detection(self, frame:np.ndarray, draw=False):
+        """
+        Detects hands and landmarks on the image frame.
+        
+        Args
+        ----
+            - frame: Image frame.
+            - draw: Whether to draw the landmarks on the image.
+        """
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         self.landmarks = self.hands.process(rgb_frame)
@@ -25,7 +33,14 @@ class HandDetector:
         if self.landmarks.multi_hand_landmarks and draw: # Draw Landmarks on image, sometimes affects sobel (hence model accuracy)
             draw_landmarks(frame, self.landmarks, self.mp_drawing, self.mp_drawing_styles)
                 
-    def sobel_detection(self, frame):
+    def sobel_detection(self, frame: np.ndarray):
+        """
+        Detects edges on the ROI of the hand landmarks. The edges are used to check the accuracy of the model.
+        
+        Args
+        ----
+            - frame: Image frame.
+        """
 
         self.sobel_edges = []
 
@@ -49,6 +64,9 @@ class HandDetector:
             self.sobel_edges.append((edges, (x_min, y_min, x_max, y_max)))
 
     def check_landmarks(self):
+        """
+        Checks the accuracy of the model based on the detected landmarks.
+        """
 
         if not self.landmarks or not self.landmarks.multi_hand_landmarks:
             self.accuracy = 0.0

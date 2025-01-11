@@ -9,15 +9,17 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 class GestureTrainer:
+    
     def __init__(self, gestures, model_path='movement_classifier/models/gesture_classifier.pkl', scaler_path='movement_classifier/models/scaler.pkl', data_path='movement_classifier/models/gesture_data.npy'):
         """
         Initializes the GestureTrainer system.
         
-        Parameters:
-        - gestures: List of gesture names corresponding to classes.
-        - model_path: Path to save the trained classifier model.
-        - scaler_path: Path to save the scaler.
-        - data_path: Path to save the collected gesture data.
+        Args
+        ----
+            - gestures: List of gesture names corresponding to classes.
+            - model_path: Path to save the trained classifier model.
+            - scaler_path: Path to save the scaler.
+            - data_path: Path to save the collected gesture data.
         """
         self.gestures = gestures
         self.num_classes = len(gestures)
@@ -32,14 +34,16 @@ class GestureTrainer:
         """
         Collects gesture data using the camera.
         
-        Parameters:
-        - num_samples_per_gesture: Number of samples to collect for each gesture.
+        Args
+        ----
+            - num_samples_per_gesture: Number of samples to collect for each gesture.
         """
         with self.mp_hands.Hands(static_image_mode=False,
                                  max_num_hands=2,
                                  min_detection_confidence=0.5,
                                  min_tracking_confidence=0.5) as hands:
             cap = cv2.VideoCapture(0)
+            
             if not cap.isOpened():
                 print("Error: Could not open webcam.")
                 return
@@ -52,6 +56,7 @@ class GestureTrainer:
 
                 while True:
                     ret, frame = cap.read()
+                    
                     if not ret:
                         print("Failed to grab frame.")
                         break
@@ -78,11 +83,13 @@ class GestureTrainer:
                     cv2.imshow('Gesture Trainer', frame)
                     
                     key = cv2.waitKey(1) & 0xFF
+                    
                     if key == ord('s') and not recording:
                         print("Recording started...")
                         recording = True
                         collected_samples = 0
                         self.current_features = []
+                        
                     elif key == ord('e') and recording:
                         print("Recording stopped.")
                         recording = False
@@ -91,6 +98,7 @@ class GestureTrainer:
                     if recording and results.multi_hand_landmarks:
                         # Extract features from all detected hands
                         all_features = []
+                        
                         for hand_landmarks in results.multi_hand_landmarks:
                             features = []
                             for lm in hand_landmarks.landmark:
@@ -99,9 +107,11 @@ class GestureTrainer:
                         
                         # Ensure the feature vector has the correct length
                         expected_length = 154  # 21 landmarks * x,y,z for 2 hands ######CHANGE THIS TO UPDATE THE NUMBER OF FEATURES 21*3*2 = gestures*14
+                        
                         if len(all_features) < expected_length:
                             # Pad with zeros if less than expected
                             all_features += [0.0] * (expected_length - len(all_features))
+                            
                         else:
                             all_features = all_features[:expected_length]
                         
@@ -122,6 +132,7 @@ class GestureTrainer:
         """
         Saves the collected gesture data to a file.
         """
+        
         if not self.data:
             print("No data to save.")
             return
@@ -136,8 +147,10 @@ class GestureTrainer:
         """
         Loads the gesture data from the saved file.
         """
+        
         if not os.path.exists(self.data_path):
             print(f"Data file {self.data_path} not found.")
+            
             return None, None
         
         data = np.load(self.data_path, allow_pickle=True).item()
@@ -145,16 +158,19 @@ class GestureTrainer:
         labels = data['labels']
 
         print(f"Loaded data from {self.data_path}: {features.shape[0]} samples.")
+        
         return features, labels
 
     def train_model(self, X, y):
         """
         Trains the MLPClassifier with the provided data.
         
-        Parameters:
-        - X: Feature matrix.
-        - y: Labels.
+        Args
+        ----
+            - X: Feature matrix.
+            - y: Labels.
         """
+        
         print("Starting model training...")
         # Normalize features
         scaler = StandardScaler()
@@ -187,10 +203,12 @@ class GestureTrainer:
         """
         Loads the saved data and trains the model.
         """
+        
         X, y = self.load_data()
 
         if X is not None and y is not None:
             self.train_model(X, y)
+            
         else:
             print("No data available for training.")
 
@@ -198,10 +216,12 @@ class GestureTrainer:
         """
         Clears the collected data and deletes the data file.
         """
+        
         self.data = []
         if os.path.exists(self.data_path):
             os.remove(self.data_path)
             print(f"Deleted data file {self.data_path}.")
+            
         else:
             print("No data file to delete.")
 
