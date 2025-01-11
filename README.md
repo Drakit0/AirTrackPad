@@ -72,13 +72,6 @@ To enhance the project:
 
 ---
 
-## 🎥 Video Demo
-
-Check out the video demonstration of the Air Trackpad:  
-👉 [Video Demo](#) 
-
----
-
 ## 👩‍💻 Authors
 
 This project was developed by:
