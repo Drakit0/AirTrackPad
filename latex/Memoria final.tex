@@ -1,0 +1,231 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage{mathrsfs}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb} 
+\usepackage{graphicx} 
+\usepackage{hyperref} 
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{eurosym}
+\usepackage{color}
+\usepackage{circuitikz}
+\usepackage{titling}
+\usepackage{hyperref}
+\usepackage{media9}
+\usepackage{lipsum}
+\usepackage{tocbibind}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\usepackage{bookmark}
+\usepackage{media9}
+\usepackage[table]{xcolor}
+\definecolor{lightblue}{RGB}{228, 244, 253}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  inputencoding=utf8,
+  extendedchars=true,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  literate=%
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {ñ}{{\~n}}1
+    {č}{{\v{c}}}1
+}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=4cm]{geometry}
+\sloppy
+
+\pagestyle{fancy}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+%%% Para las cabeceras
+\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\headheight=50pt
+%%% 
+\newcommand{\vacio}{\textcolor{white}{ .}}
+
+%%% Para que las ecuaciones se numeren
+%%% con el número de sección y el de ecuación.
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+
+% Color azul para algunos 
+% textos de la portada
+\definecolor{azulportada}{rgb}{0.16, 0.32, 0.75}
+
+%%%% Azul para textos de headings
+\definecolor{azulinterior}{rgb}{0.0, 0.2, 0.6}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% Datos del proyecto %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%TÍTULO
+%%% Escribirlo en minúsculas, el programa
+%%% lo pondrá en mayúsculas en la portada.
+
+\title{AirTrackPad}
+
+%%%% AUTORES
+\author{Lydia Ruiz Martínez \and Pablo Tuñón Laguna}
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage} %%%%% Aquí no hay que tocar nada.
+	%%%% Las siguientes instrucciones generarán automáticamente
+	%%%% la portada de tu proyecto.
+	%%% Cambio de la estructura de esta página
+\newgeometry{left=0.6cm,top=1.3cm,bottom=1.2cm}
+
+\fbox{\parbox[c]{18.5cm}{
+\begin{center}
+\vspace{1.5cm}
+{\fontfamily{ptm}\fontsize{24}{28.8}\selectfont{Universidad Pontificia de Comillas}}\\
+[2.5em]
+{\fontfamily{ptm}\fontsize{24}{5}\selectfont{ICAI}}\\
+[3.5em]
+{\fontfamily{ptm}\fontsize{28}{5}\selectfont{PROYECTO FINAL}}\\
+[2cm]
+{\fontfamily{ptm}\fontsize{24}{5}\selectfont{Visión por Ordenador I}}\\
+[2cm]
+
+% Autor del trabajo de investigación
+\textcolor{azulportada}{\fontfamily{ptm}\fontsize{16}{5}\selectfont{\theauthor}}\\
+[2cm]
+% Título del trabajo
+\textcolor{azulportada}
+{\fontfamily{ptm}\fontsize{30}{5}\selectfont{\textsc{\thetitle}}}\\
+%{\Huge\textbf{\thetitle}}\\
+[1.2cm]
+\includegraphics[width=10cm]{Logo ICAI.png}
+\\[1.8cm]
+
+{\fontfamily{ptm}\fontsize{16}{5}\selectfont{Curso 2024-2025}}\\
+[4cm]
+\end{center}
+}}
+\end{titlepage}
+ 
+ \restoregeometry
+ %%%% Volvemos a la estructura de la página normal
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{%\Large
+
+%%%Encabezamiento y pie de página
+%%% También se genera automáticamente
+%%% Mejor no tocarlo mucho.
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyhead[R]{
+\textcolor{azulportada}{\fontfamily{ptm}\fontsize{10}{3}\selectfont{Proyecto Final de Visión por Ordenador I}}\\
+{\fontfamily{ptm}\fontsize{10}{3}\selectfont{\theauthor}}}
+\fancyhead[L]{
+  \textcolor{azulinterior}{\fontfamily{ptm}\fontsize{12}{4}\selectfont{\textbf{\thetitle}}}\\
+}
+
+
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyfoot[L]{\footnotesize Universidad Pontificia Comillas (ICAI) --- curso 2024-2025}
+\fancyfoot[C]{\vacio}
+\fancyfoot[R]{\footnotesize Página \thepage}
+
+%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\renewcommand{\contentsname}{Índice}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}} % Quita el índice de la tabla de contenidos
+\tableofcontents
+\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
+
+\newpage
+
+\section{Introducción}
+La interacción natural entre humanos y computadoras ha evolucionado significativamente, buscando interfaces más intuitivas y sin contacto físico. AirTrackPad se enmarca en esta tendencia, permitiendo controlar dispositivos mediante gestos manuales detectados en el aire, sin necesidad de hardware adicional.
+
+\section{Metodología}
+
+\subsection{Estructura del Proyecto}
+El repositorio se organiza en las siguientes carpetas y archivos principales:
+
+\begin{itemize}
+    \item \textbf{3d files}: como parte del proyecto, se diseñaron e imprimieron en 3D dos accesorios específicos para optimizar el uso de la cámara en entornos de prueba
+    \item \textbf{actions\_handler}: módulo encargado de gestionar las acciones derivadas de los gestos detectados.
+    \item \textbf{camera\_calibration}: incluye el script empleado para la calibración de la cámara.
+    \item \textbf{hand\_tracking}: implementa la detección y seguimiento de manos utilizando \texttt{Mediapipe}.
+    \item \textbf{movement\_classifier}: contiene modelos y scripts para la clasificación de gestos mediante técnicas de aprendizaje automático.
+    \item \textbf{movement\_follower}: responsable del seguimiento de movimientos específicos de la mano.
+    \item \textbf{airtrackpad.py}: script principal que integra y coordina todos los módulos del sistema.
+    \item \textbf{utils.py}: funciones auxiliares utilizadas en diversos módulos del proyecto.
+\end{itemize}
+
+\subsection{Calibración de la Cámara}
+La calibración de la cámara es esencial para corregir distorsiones y garantizar la precisión en la detección de gestos. Se utilizó un conjunto de imágenes de patrones de un tablero de ajedrez para obtener los parámetros intrínsecos y extrínsecos de la cámara, permitiendo una correcta interpretación de las coordenadas espaciales.
+
+\subsection{Detección y Seguimiento de Manos}
+Para la detección de manos, se empleó la biblioteca \texttt{Mediapipe}, que proporciona una identificación robusta de 21 puntos clave (\textit{landmarks}) en la mano. Sin embargo, para mejorar la precisión en condiciones variables, se implementaron técnicas adicionales:
+
+\begin{itemize}
+    \item \textbf{Filtros Sobel}: aplicados sobre la Región de Interés (ROI) de cada punto detectado para refinar la posición de los \textit{landmarks}, especialmente en entornos con iluminación variable.
+    \item \textbf{Flujo Óptico de Lucas-Kanade}: utilizado para el seguimiento de los \textit{landmarks} entre frames, ajustando el tamaño de la ventana de búsqueda según la capacidad del dispositivo (e.g., 15 píxeles en ordenadores y 5 en Raspberry Pi) para optimizar el rendimiento.
+\end{itemize}
+
+\subsection{Clasificación de Gestos}
+Se desarrolló una red neuronal con una capa oculta de 10 neuronas y función de activación ReLU para la clasificación de gestos. Dada la limitación de recursos en dispositivos como la Raspberry Pi, se optó por una arquitectura ligera que permite reconocer hasta 10 gestos diferentes con alta precisión. El entrenamiento se realizó utilizando conjuntos de datos generados a partir de videos, donde cada gesto se asoció a una clase específica mediante el análisis de secuencias de fotogramas.
+
+\subsection{Gestión de Acciones}
+El módulo \texttt{actions\_handler} traduce los gestos reconocidos en acciones específicas, como mover el cursor, hacer clic o desplazarse. Se implementó un sistema de bloqueo (\textit{lock}) para asegurar que las acciones se ejecuten de manera secuencial y evitar conflictos, garantizando una interacción fluida y coherente.
+
+\section{Resultados}
+El sistema AirTrackPad fue evaluado en diversos entornos y condiciones de iluminación, demostrando una alta precisión en la detección y seguimiento de gestos. La integración de \texttt{Mediapipe} con técnicas adicionales como filtros Sobel y flujo óptico mejoró significativamente la robustez del sistema. La red neuronal implementada permitió una clasificación efectiva de los gestos, con tiempos de respuesta adecuados para una interacción en tiempo real.
+
+\section{Futuros Desarrollos}
+Aunque AirTrackPad ha mostrado resultados prometedores, se identificaron áreas para mejoras futuras:
+
+\begin{itemize}
+    \item \textbf{Ampliación del conjunto de gestos}: incorporar más gestos para aumentar la funcionalidad del sistema.
+    \item \textbf{Optimización del rendimiento}: refinar los algoritmos para reducir la latencia y mejorar la eficiencia, especialmente en dispositivos con recursos limitados.
+    \item \textbf{Integración con aplicaciones externas}: facilitar la compatibilidad con software de terceros para ampliar las aplicaciones prácticas del sistema.
+\end{itemize}
+
+\section{Conclusión}
+AirTrackPad representa un avance en las interfaces de usuario basadas en gestos, combinando técnicas de visión por computador y aprendizaje automático para ofrecer una interacción natural y sin contacto físico. Los resultados obtenidos son alentadores, y las mejoras propuestas apuntan a consolidar este sistema como una herramienta versátil en diversos ámbitos tecnológicos.
+
+
+\end{document}
+
+
+
