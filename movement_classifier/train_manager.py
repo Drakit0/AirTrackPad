@@ -1,5 +1,5 @@
 import time
-from trainer import GestureTrainer 
+from ClassifierTrainer import GestureTrainer 
 
 gestures = [
     "Left Click",
@@ -15,7 +15,7 @@ gestures = [
     "No Gesture"]
 
 trainer = GestureTrainer(gestures=gestures)
-trainer.collect_data(num_samples_per_gesture=200)
+trainer.collect_data(num_samples_per_gesture=500)
 
 # t_0 = time.time()
 trainer.train_from_saved_data()

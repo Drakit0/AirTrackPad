@@ -2,9 +2,10 @@ import cv2
 import time
 import numpy as np
 from utils import draw_landmarks
-from hand_tracking.detector import HandDetector
-from movement_follower.completor import landmark_completor
-from movement_classifier.classifier import NeuralClassifier
+from hand_tracking.HandsDetector import HandDetector
+from movement_follower.FPSComplete import landmark_completor
+from movement_classifier.Classifier import NeuralClassifier
+from actions_handler.ActionsManager import ActionManager
 
 
 if __name__ == "__main__":
@@ -30,6 +31,10 @@ if __name__ == "__main__":
     
     detector = HandDetector() # Hand detector
     
+    frame_width = 640
+    frame_height = 480
+    manager = ActionManager(frame_width, frame_height) # Action manager
+    
     prev_frame = None # For optical flow
     prev_landmarks = None
     
@@ -40,7 +45,7 @@ if __name__ == "__main__":
     while cam.isOpened():
         
         ret, frame = cam.read()
-        
+        print(frame.shape)
         if not ret:
             break
         
@@ -81,6 +86,16 @@ if __name__ == "__main__":
             
         prev_frame = frame.copy()
         prev_landmarks = detector.landmarks
+        
+        if gesture == 9: # Pointing
+            for hand_landmarks in detector.landmarks.multi_hand_landmarks:
+                for landmark in hand_landmarks.landmark:
+                    manager.handle_gesture(gesture, landmark)
+                     
+        else: # Other gestures
+            manager.handle_gesture(gesture)
+            
+        cv2.putText(frame, f"{gesture_actions[gesture]}, {confidence}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         
         cv2.imshow("Frame", frame)
 

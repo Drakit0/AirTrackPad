@@ -29,3 +29,5 @@ def draw_landmarks(frame, landmarks, mp_drawing, mp_drawing_styles):
             mp_drawing_styles.get_default_hand_landmarks_style(),
             mp_drawing_styles.get_default_hand_connections_style()
         )
+        
+
