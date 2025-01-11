@@ -1,12 +1,11 @@
 import cv2
-import mediapipe as mp
-import numpy as np
-import os
 import joblib
+import numpy as np
+import mediapipe as mp
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
 class GestureTrainer:
     def __init__(self, gestures, model_path='movement_clasifier/models/gesture_classifier.pkl', scaler_path='movement_clasifier/models/scaler.pkl', data_path='movement_clasifier/models/gesture_data.npy'):
