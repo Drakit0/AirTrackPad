@@ -1,0 +1,14 @@
+\babel@toc {spanish}{}\relax 
+\setcounter {tocdepth}{-1}
+\contentsline {section}{Index of contents}{1}{section*.1}%
+\setcounter {tocdepth}{3}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Methodology}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Camera Calibration}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Hand Detection and Tracking}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Gesture completion}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Gesture Classification}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Action Handling}{4}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Results}{4}{section.3}%
+\contentsline {section}{\numberline {4}Future developments}{4}{section.4}%
+\contentsline {section}{\numberline {5}Trainment of the model}{4}{section.5}%
