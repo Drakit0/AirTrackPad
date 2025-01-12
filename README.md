@@ -68,8 +68,7 @@ To enhance the project:
 ## 🎥 Video Demo
 
 Check out the video demonstration of the Air Trackpad:  
-👉 ![til](project_documentation/contents/video_example.mp4)
-
+👉 [![Demo Video](project_documentation/contents/3dmodel.png)](project_documentation/contents/video_example.mp4)
 ---
 
 ## 👩‍💻 Authors
