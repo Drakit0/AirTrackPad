@@ -1,80 +1,90 @@
-# 🌟 *Air Trackpad* 🌟
+# AirTrackPad
 
-## 🖐️ Introduction
+Hand-gesture mouse for Windows, Linux and Raspberry Pi: a webcam or Pi camera replaces the trackpad, using MediaPipe hand tracking and a small neural network that classifies the gesture.
 
-In this project the python libraries *MediaPipe* and *OpenCV* are used to create an innovative computer vision mouse that works in either Windows or Linux OS. The system captures hand gestures through a camera and classifies them into actions such as cursor movement, clicking, scrolling, and zooming. The project combines hand detection, gesture recognition, and computer vision techniques to deliver a seamless hands-free interface.
+[Demo video](project_documentation/contents/video_example.mov) (the 3D-printed camera mount is shown below)
 
----
+![3D-printed camera mount](project_documentation/contents/3dmodel.png)
 
-## ⚙️ Methodology
+## What it does
 
-### ✋ Hand Detection and Tracking
+The camera sees one or two hands. The program tracks 21 landmarks per hand, classifies the current gesture and turns it into a mouse action with PyAutoGUI. There are 11 classes:
 
-*MediaPipe*'s hand detection system is used to detect and track key hand landmarks in real-time. The system extracts 3D coordinates for critical points such as fingertips and palm centers. These landmarks form the foundation for gesture classification.
+| Class | Action |
+|---|---|
+| Pointing | Move the cursor with the index finger |
+| Left Click, Right Click, Double Click | Clicks (see `movement_classifier/movements_documentation.txt` for the gestures) |
+| Zoom In, Zoom Out | Zoom |
+| Scroll Up, Scroll Down, Scroll Left, Scroll Right | Scroll in four directions |
+| No Gesture | Nothing |
 
-**The detection process includes:**
-1. 📸 *Frame Capture*: Real-time video is captured using OpenCV.
-2. 🖐️ *Landmark Detection*: MediaPipe identifies and tracks hand landmarks.
-3. 📐 *Landmark verification*: Landmarks are checked using a sobel filter on the ROI of the detected hand.
+## How it works
 
----
+1. **Landmarks.** MediaPipe Hands gives 21 landmarks per hand (`hand_tracking/HandsDetector.py`).
+2. **Landmark check.** A Sobel filter is applied to the region of interest around the hand. The edge response gives an accuracy score for the detection.
+3. **Fallback.** When the score is below 0.80, or MediaPipe loses the hand (for example by occlusion), the previous landmarks are carried forward with Lucas-Kanade optical flow, one flow per landmark (`movement_follower/FPSComplete.py`). A reduced mode uses smaller windows and fewer iterations for the Raspberry Pi.
+4. **Classifier.** The landmark coordinates of both hands (154 features) go into a scikit-learn `MLPClassifier` with one hidden layer of 10 ReLU units, trained with Adam (`movement_classifier/`). Logistic regression was tried first and was less accurate. The report says 10 units was the size that still ran in real time on the Raspberry Pi.
+5. **Actions.** `actions_handler/ActionsManager.py` maps the class to PyAutoGUI calls and uses a lock so actions run one at a time.
 
-### 🤚 Gesture Recognition
+The first hand detection attempt, a Canny filter over a MOG2 background mask, was dropped because it was slow and unreliable (from the project report).
 
-The system recognizes complex gestures by analyzing the configuration and motion of hand landmarks. Gestures are mapped to actions such as:
-- 🖱️ *Cursor Movement*: Index finger position defines cursor location.
-- 🖱️ *Clicks*: Pinch gestures trigger left or right clicks.
-- 📜 *Scrolling*: Vertical or horizontal swipes scroll the screen.
-- 🔍 *Zooming*: Expanding or contracting finger distances adjusts zoom levels.
+Camera calibration (`camera_calibration/CalibrateCamera.py`) uses chessboard images and OpenCV, and writes the intrinsics to a CSV file.
 
-**To ensure robust detection:**
-- Apply a Lukas Kanade optical flow algorithm to track hand movement between frames when the accuracy of the hand detection is low aiming to not lose the cursor position.
+## Results
 
----
+From the project report (`project_documentation/Documentation.pdf`, December 2024):
 
-### 📍 Coordinate Mapping
+- about 30 fps in real time, without losing the hand
+- about 90 % classification accuracy
+- scrolling and two-hand gestures are the weakest classes
 
-Detected gestures are mapped to screen coordinates based on the display resolution. This ensures the system dynamically adapts to varying screen sizes and camera positions.
+These figures are the report's own and were not re-measured.
 
----
+## Run it
 
-### 🧠 Advanced Techniques
+Python with a camera is needed. Install the dependencies:
 
-1. **Movements classifier**:
-   - Neural network that classifies the movements of the hand in the air.
-   - Uses 10 neurons on the hidden layer to avoid complexity on the model.
-   - The model can be charged with a pre-trained model or trained from scratch with an easy-to-use interface that records the movements that the user wants to classify.
----
+    pip install -r requirements.txt
 
-## ✅ Results
+`requirements.txt` was frozen from the Raspberry Pi setup and includes `picamera2` and `python3-xlib`, which are not needed on Windows; remove them if pip fails on them.
 
-The *Air Trackpad* performs reliably under various conditions:
-- 🖐️ Gestures are accurately detected in real-time.
-- 🚀 Cursor movements are smooth, thanks to stabilization techniques.
-- 🖱️ Clicks, scrolling, and zoom actions are intuitive and responsive.
+Start it from the repository root:
 
-However, in challenging environments with excessive lighting variations or fast hand movements, minor delays or misclassifications may occur.
+    python airtrackpad.py          # Windows / any OS with a webcam
+    python AirTrackPadLinux.py     # Raspberry Pi with Picamera2
 
----
+Press `q` to quit. Press `l` to force the optical-flow step.
 
-## 🚀 Future Improvements
+The scripts import `Utils` and `movement_classifier.Classifier`, while the files are named `utils.py` and `classifier.py`. This works on Windows. On a case-sensitive filesystem (Linux) the files need renaming or the imports need changing.
 
-To enhance the project:
-1. 🖱️ Add support for more gestures, such as window switching or custom gestures for application shortcuts as well as a better classification of the current gestures.
-2. ✂️ Implement real-time background removal to improve detection accuracy in cluttered environments.
-3. 📦 Package the system as a standalone application for easy installation and use.
----
+### Train your own gestures
 
-## 🎥 Video Demo
+Edit the gesture list in `movement_classifier/train_manager.py`, then from the repository root:
 
-Check out the video demonstration of the Air Trackpad:  
-👉 [![Demo Video](project_documentation/contents/3dmodel.png)](project_documentation/contents/video_example.mov)
----
+    python movement_classifier/train_manager.py
 
-## 👩‍💻 Authors
+A window shows which gesture is being recorded. Press `s` to start recording and `e` to stop. Samples are saved to `movement_classifier/models/gesture_data.npy` and the model and scaler are written next to it. The report explains that the feature count (line 109 of `ClassifierTrainer.py`, 154 now) and the class count in `airtrackpad.py` must be updated if the gestures change.
 
-This project was developed by:
-- *Lydia Ruiz Martínez* ([LydiaRuizMartinez](https://github.com/LydiaRuizMartinez))  
-- *Pablo Tuñón Laguna* ([Drakit0](https://github.com/Drakit0))
+### Calibrate a camera
 
----
+Put chessboard photos (`.jpg`, 6x9 inner corners) in `raw_data/` and run:
+
+    python camera_calibration/CalibrateCamera.py
+
+## Structure
+
+    airtrackpad.py, AirTrackPadLinux.py   main loops (webcam, Picamera2)
+    hand_tracking/                        MediaPipe and Sobel check
+    movement_follower/                    Lucas-Kanade fallback
+    movement_classifier/                  MLP, trainer, saved model and data
+    actions_handler/                      gesture to mouse action
+    camera_calibration/                   chessboard calibration
+    3d files/                             camera case and frame (.3mf)
+    project_documentation/                report (PDF and LaTeX), poster, demo video
+
+## Authors
+
+- Lydia Ruiz Martínez ([LydiaRuizMartinez](https://github.com/LydiaRuizMartinez))
+- Pablo Tuñón Laguna ([Drakit0](https://github.com/Drakit0))
+
+Final project for Visión por Ordenador I, Universidad Pontificia Comillas (ICAI), course 2024-2025, Bachelor's Degree in Mathematical Engineering and Artificial Intelligence.

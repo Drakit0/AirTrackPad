@@ -5,3 +5,24 @@ raw_data/
 *.zip
 *.doc
 *.ppt
+
+# Python
+*.pyc
+.ipynb_checkpoints/
+venv/
+.venv/
+env/
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
