@@ -87,4 +87,4 @@ Put chessboard photos (`.jpg`, 6x9 inner corners) in `raw_data/` and run:
 - Lydia Ruiz Martínez ([LydiaRuizMartinez](https://github.com/LydiaRuizMartinez))
 - Pablo Tuñón Laguna ([Drakit0](https://github.com/Drakit0))
 
-Final project for Visión por Ordenador I, Universidad Pontificia Comillas (ICAI), course 2024-2025, Bachelor's Degree in Mathematical Engineering and Artificial Intelligence.
+Final project for Visión por Ordenador I, Universidad Pontificia Comillas (ICAI), course 2024-2025.
